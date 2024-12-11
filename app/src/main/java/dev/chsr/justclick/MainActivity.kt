@@ -28,6 +28,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+val df = DecimalFormat("#.##")
+
+fun formatCoins(coins: Float): String {
+    if (coins > 100000000) return "${df.format(coins / 1000000)}kk"
+    if (coins > 100000) return "${df.format(coins / 1000f)}k"
+    return df.format(coins)
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +47,13 @@ class MainActivity : ComponentActivity() {
             disabledContainerColor = Color.DarkGray
         )
         val scope = CoroutineScope(Dispatchers.Main)
-        val df = DecimalFormat("#.##")
 
         setContent {
             JustClickTheme {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    val coins = remember { mutableFloatStateOf(0f) }
+                    val coins = remember { mutableFloatStateOf(99500f) }
                     val coinsForClick = remember { mutableFloatStateOf(1f) }
                     val autoCoins = remember { mutableFloatStateOf(0.1f) }
                     LaunchedEffect(scope) {
@@ -61,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.align(Alignment.Center)
                     ) {
                         Text(
-                            text = df.format(coins.floatValue),
+                            text = formatCoins(coins.floatValue),
                             fontSize = 48.sp,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
@@ -77,14 +84,14 @@ class MainActivity : ComponentActivity() {
                                 .padding(10.dp)
                         ) {
                             Text(
-                                text = "+${df.format(coinsForClick.floatValue)}",
+                                text = "+${formatCoins(coinsForClick.floatValue)}",
                                 textAlign = TextAlign.Center,
                                 fontSize = 18.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
                         }
                         Text(
-                            text = "Auto: ${df.format(autoCoins.floatValue)}/s",
+                            text = "Auto: ${formatCoins(autoCoins.floatValue)}/s",
                             fontSize = 16.sp,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
@@ -109,16 +116,16 @@ class MainActivity : ComponentActivity() {
                                 .padding(bottom=10.dp)
                         ) {
                             Text(
-                                text = df.format(coinsForClick.floatValue * 10f),
+                                text = formatCoins(coinsForClick.floatValue * 10f),
                                 textAlign = TextAlign.Left,
                                 modifier = Modifier.padding(end = 30.dp)
                             )
                             Text(
-                                text = "Upgrade coins for click",
+                                text = "Upgrade coins/click",
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = "+${df.format(coinsForClick.floatValue / 10f)}",
+                                text = "+${formatCoins(coinsForClick.floatValue / 10f)}",
                                 textAlign = TextAlign.Right,
                                 modifier = Modifier.padding(start = 30.dp)
                             )
@@ -134,7 +141,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         ) {
                             Text(
-                                text = df.format(autoCoins.floatValue * 10f),
+                                text = formatCoins(autoCoins.floatValue * 10f),
                                 textAlign = TextAlign.Left,
                                 modifier = Modifier.padding(end = 30.dp)
                             )
@@ -143,7 +150,7 @@ class MainActivity : ComponentActivity() {
                                 textAlign = TextAlign.Center
                             )
                             Text(
-                                text = "+${df.format(autoCoins.floatValue / 10f)}",
+                                text = "+${formatCoins(autoCoins.floatValue / 10f)}",
                                 textAlign = TextAlign.Right,
                                 modifier = Modifier.padding(start = 30.dp)
                             )
